@@ -1,37 +1,45 @@
 # japan-pref-city-api
 
-都道府県名から市区町村を取得できる日本住所API  
-A simple Japanese address API to get municipalities (cities, towns, villages) from prefecture names.
-
-## Features
-
-- 日本の都道府県一覧を取得可能
-- 都道府県名から対応する市区町村一覧を取得
-- JSONファイルベースで高速レスポンス
-- シンプルなREST API構成
+都道府県名から市区町村を取得できる、シンプルな日本住所APIです。
 
 ---
 
-## 🚀 Getting Started
+## 特長
 
-### 1. Clone this repository
+- 日本全国の都道府県名を取得可能
+- 指定した都道府県に対応する市区町村一覧を取得
+- 静的なJSONファイルを使用した高速レスポンス
+- シンプルなREST API構成で、学習用にも最適
+
+---
+
+## 必要環境
+
+- Node.js v14以上（LTS推奨）
+- npm v6以上
+
+---
+
+## セットアップ手順
+
+### 1. リポジトリをクローン
 
 ```bash
 git clone https://github.com/your-username/japan-pref-city-api.git
 cd japan-pref-city-api
 ````
 
-### 2. Install dependencies
+### 2. 依存パッケージをインストール
 
 ```bash
 npm install
 ```
 
-### 3. Start the server
+### 3. サーバーを起動
 
 ```bash
 node app.js
-# または開発用
+# または開発モードで起動
 npx nodemon app.js
 ```
 
@@ -39,13 +47,13 @@ npx nodemon app.js
 
 ---
 
-## 📡 API Endpoints
+## APIエンドポイント一覧
 
-### 1. GET `/api/prefectures`
+### `/api/prefectures` （GET）
 
-日本のすべての都道府県名を取得します。
+都道府県名の一覧を取得します。
 
-**レスポンス例**：
+**レスポンス例：**
 
 ```json
 [
@@ -59,15 +67,15 @@ npx nodemon app.js
 
 ---
 
-### 2. GET `/api/municipalities?prefecture=北海道`
+### `/api/municipalities?prefecture=北海道` （GET）
 
-指定した都道府県に対応する市区町村一覧を取得します。
+指定された都道府県に対応する市区町村一覧を取得します。
 
-**パラメータ**：
+**クエリパラメータ：**
 
 * `prefecture`（必須）：都道府県名（例：`東京都`, `大阪府`, `北海道`）
 
-**レスポンス例**：
+**レスポンス例：**
 
 ```json
 [
@@ -78,7 +86,7 @@ npx nodemon app.js
 ]
 ```
 
-**エラーレスポンス例（不正な都道府県名）**：
+**エラーレスポンス例（都道府県名が不正または未指定）：**
 
 ```json
 {
@@ -88,27 +96,71 @@ npx nodemon app.js
 
 ---
 
-## Project Structure
+## リクエスト例（curl）
 
-```json
-japan-pref-city-api/
-├── app.js                 // メインサーバーファイル
-├── routes/
-│   └── geo.js             // APIルート定義
-├── data/
-│   └── pref-muni.json     // 都道府県と市区町村のマッピングデータ
-└── README.md              // このファイル
+```bash
+# 都道府県一覧を取得
+curl http://localhost:3000/api/prefectures
+
+# 北海道の市区町村を取得
+curl "http://localhost:3000/api/municipalities?prefecture=北海道"
 ```
 
 ---
 
-## Notes
+## プロジェクト構成
 
-* `pref-muni.json` は独自の構造に基づいた静的データで、随時更新可能です。
-* 利用するアプリケーションに組み込んだり、学習用途に活用できます。
+```bash
+japan-pref-city-api/
+├── app.js                 # メインサーバーファイル
+├── routes/
+│   └── geo.js             # APIルートの定義
+├── data/
+│   └── pref-muni.json     # 都道府県と市区町村のマッピングデータ
+└── README.md              # このドキュメント
+```
 
 ---
 
-## License
+## CORSについて（ブラウザ対応向け）
 
-This project is licensed under the MIT License.
+このAPIはローカル開発用途で構築されています。ブラウザから直接リクエストする場合は、`cors` パッケージを導入してください。
+
+### 追加コード例：
+
+```js
+const cors = require('cors');
+app.use(cors());
+```
+
+---
+
+## データカスタマイズ
+
+`data/pref-muni.json` の形式は以下のようになっています：
+
+```json
+{
+  "北海道": ["札幌市", "函館市", "小樽市", ...],
+  "東京都": ["千代田区", "新宿区", "八王子市", ...]
+}
+```
+
+* キー：都道府県名
+* 値：市区町村名の配列
+
+このファイルを編集すれば任意のデータを追加・変更できます。
+
+---
+
+## 補足事項
+
+* 外部APIを使用せず、JSONファイルのみで完結しているため、非常に軽量です。
+* 学習用途や小規模アプリへの組み込みに最適です。
+* 自治体コード（市区町村コード）や緯度経度などの追加データを組み込むことで、拡張利用も可能です。
+
+---
+
+## ライセンス
+
+このプロジェクトは [MITライセンス](LICENSE) のもとで公開されています。
